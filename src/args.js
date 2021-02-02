@@ -1,12 +1,12 @@
 import minimist from 'minimist'
 
-const checkArgs = (parsedArgs) => {
+const getRequiredArgs = (parsedArgs) => {
   const REQUIRED_PARAMS = Object.freeze([
     'package-name',
     'package-version'
   ])
 
-  // TODO: extract to fn 
+  // TODO: extract to check fn 
   const argsNames = Object.keys(parsedArgs)
   const haveAllRequiredArgs = REQUIRED_PARAMS.every((requiredParam) => {
     return argsNames.includes(requiredParam)
@@ -27,6 +27,6 @@ const checkArgs = (parsedArgs) => {
 
 export const parseArgumentsIntoOptions = (argv) => {
   const parsedArgs = minimist(argv.slice(2))
-  const requiredArgs = checkArgs(parsedArgs)
+  const requiredArgs = getRequiredArgs(parsedArgs)
   return requiredArgs
 }
