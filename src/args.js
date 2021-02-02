@@ -10,6 +10,7 @@ const getRequiredArgs = (parsedArgs) => {
 
   // TODO: extract to check fn 
   const argsNames = Object.keys(parsedArgs)
+  console.dir(parsedArgs)
   const haveAllRequiredArgs = REQUIRED_PARAMS.every((requiredParam) => {
     return argsNames.includes(requiredParam)
   })

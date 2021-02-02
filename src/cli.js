@@ -1,33 +1,43 @@
 import { parseArgumentsIntoOptions } from './args.js'
 import { getEnvOptions } from './env.js'
-import { getAuthorizedBitbucketClient, getRepo } from './bitbucket.js'
+import {
+  getAuthorizedBitbucketClient,
+  createBranch,
+  createPullRequest
+} from './bitbucket.js'
+
 
 export async function cli(argv, env) {
   let options = parseArgumentsIntoOptions(argv);
   if (!options) { return }
-  console.log('Options:')
-  console.dir(options)
 
-  let bitbucketCreds = getEnvOptions(env)
-  if (!bitbucketCreds) { return }
- 
+  const envOptions = getEnvOptions(env)
+  if (!envOptions) { return }
+
+  const clientOptions = {
+    auth: envOptions.auth
+  }
+  
   try {
-    let bitbucket = getAuthorizedBitbucketClient(bitbucketCreds)
+    let bitbucket = getAuthorizedBitbucketClient(clientOptions)
 
-    let repo = await getRepo({
+    await createBranch({
       bitbucket,
       repoSlug: options['repo-slug'],
-      workspace: options['repo-workspace']
+      workspace: options['repo-workspace'],
+      branchName: 'update-package-version'
     })
 
-    console.log('Repo info:')
-    console.dir(repo)
-  } catch(err) {
-    const { message, error, headers, request, status } = err
-    console.log('error message:', message)
-  }
+    // TODO: update package.json with new package version
 
-  // TODO: use https://wwww.npmjs.com/package/bitbucket to auth to provided repo
-  // TODO: update package.json with new package version
-  // TODO: create PR using bitbucket npm
+    await createPullRequest({
+      bitbucket,
+      repoSlug: options['repo-slug'],
+      workspace: options['repo-workspace'],
+      branchName: 'update-package-version',
+      title: `Update package ${ options['package-name'] } version to ${ options['package-version'] }`
+    })
+  } catch(err) {
+    console.dir(err)
+  }
 }
