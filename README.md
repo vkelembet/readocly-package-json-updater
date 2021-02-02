@@ -1,0 +1,1 @@
+# readocly-package-json-updater
