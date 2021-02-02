@@ -1,10 +1,12 @@
 import { parseArgumentsIntoOptions } from './args.js'
 import { getEnvOptions } from './env.js'
-import { getAuthorizedBitbucketClient } from './bitbucket.js'
+import { getAuthorizedBitbucketClient, getRepo } from './bitbucket.js'
 
 export async function cli(argv, env) {
   let options = parseArgumentsIntoOptions(argv);
   if (!options) { return }
+  console.log('Options:')
+  console.dir(options)
 
   let bitbucketCreds = getEnvOptions(env)
   if (!bitbucketCreds) { return }
@@ -12,10 +14,14 @@ export async function cli(argv, env) {
   try {
     let bitbucket = getAuthorizedBitbucketClient(bitbucketCreds)
 
-    const { data, headers, status, url } = await bitbucket
-      .repositories
-      .listGlobal({})
-    console.log('repositories:', data)
+    let repo = await getRepo({
+      bitbucket,
+      repoSlug: options['repo-slug'],
+      workspace: options['repo-workspace']
+    })
+
+    console.log('Repo info:')
+    console.dir(repo)
   } catch(err) {
     const { message, error, headers, request, status } = err
     console.log('error message:', message)

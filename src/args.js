@@ -3,7 +3,9 @@ import minimist from 'minimist'
 const getRequiredArgs = (parsedArgs) => {
   const REQUIRED_PARAMS = Object.freeze([
     'package-name',
-    'package-version'
+    'package-version',
+    'repo-slug',
+    'repo-workspace'
   ])
 
   // TODO: extract to check fn 
@@ -11,9 +13,6 @@ const getRequiredArgs = (parsedArgs) => {
   const haveAllRequiredArgs = REQUIRED_PARAMS.every((requiredParam) => {
     return argsNames.includes(requiredParam)
   })
-
-  console.log('argsNames:', argsNames)
-  console.log('REQUIRED_PARAMS:', REQUIRED_PARAMS)
   
   if (!haveAllRequiredArgs) {
     // TODO: log error
