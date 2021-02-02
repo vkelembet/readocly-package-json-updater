@@ -9,11 +9,9 @@ const getRequiredEnvVars = (env) => {
   }
 
   return {
-    bitbucket: {
-      auth: {
-        username: env.BITBUCKET_AUTH_USERNAME,
-        password: env.BITBUCKET_AUTH_PASSWORD
-      }
+    auth: {
+      username: env.BITBUCKET_AUTH_USERNAME,
+      password: env.BITBUCKET_AUTH_PASSWORD
     }
   }
 }
