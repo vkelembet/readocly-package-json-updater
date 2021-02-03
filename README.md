@@ -1,4 +1,4 @@
-# readocly-package-json-updater
+# redocly-package-json-updater
 
 A node script that updates `package.json` in BitBucket repo and opens a pull request.
 
